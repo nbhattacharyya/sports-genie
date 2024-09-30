@@ -1,22 +1,19 @@
 import { StackContext, Api, EventBus } from "sst/constructs";
+import { DataStack } from "./DataStack";
 
-export function API({ stack }: StackContext) {
+export function API({ stack, app }: StackContext) {
   const bus = new EventBus(stack, "bus", {
     defaults: {
       retries: 10,
     },
   });
 
+  const { fetchGamesLambda } = DataStack({stack, app});
+
   const api = new Api(stack, "api", {
-    defaults: {
-      function: {
-        bind: [bus],
-      },
-    },
+    defaults: {},
     routes: {
-      "GET /": "packages/functions/src/lambda.handler",
-      "GET /todo": "packages/functions/src/todo.list",
-      "POST /todo": "packages/functions/src/todo.create",
+      "GET /games": fetchGamesLambda
     },
   });
 

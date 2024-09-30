@@ -16,6 +16,9 @@ export const DataStack = ({stack, app}: StackContext) => {
     const fetchGamesTask = new tasks.LambdaInvoke(stack, 'fetchGamesTask', {
         lambdaFunction: fetchGamesLambda,
         outputPath: '$.Payload'
-    })
+    });
 
+
+
+    return { fetchGamesLambda };
 }
