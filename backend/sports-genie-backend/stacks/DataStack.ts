@@ -1,7 +1,10 @@
-import { StackContext, Function } from "sst/constructs";
+import { StackContext, Function, use } from "sst/constructs";
 import * as tasks from 'aws-cdk-lib/aws-stepfunctions-tasks';
+import { ConfigStack } from "./ConfigStack";
 
 export const DataStack = ({stack, app}: StackContext) => {
+
+    const { ODDS_API_KEY, ODDS_API_URL } = use(ConfigStack);
 
     const fetchGamesLambda = new Function(stack, 'fetchGamesLambda', {
         functionName: `${app.stage}-${app.name}-fetch-games`,
@@ -9,7 +12,7 @@ export const DataStack = ({stack, app}: StackContext) => {
         timeout: '10 minutes',
         logRetention: 'one_month',
         tracing: 'active',
-        bind: [],
+        bind: [ODDS_API_KEY, ODDS_API_URL],
         environment: {}
     });
 

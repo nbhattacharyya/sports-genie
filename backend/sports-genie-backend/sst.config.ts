@@ -1,5 +1,7 @@
 import { SSTConfig } from "sst";
 import { API } from "./stacks/ApiStack";
+import { ConfigStack } from "./stacks/ConfigStack";
+import { DataStack } from "./stacks/DataStack";
 
 export default {
   config(_input) {
@@ -9,6 +11,8 @@ export default {
     };
   },
   stacks(app) {
+    app.stack(ConfigStack);
+    app.stack(DataStack)
     app.stack(API);
   }
 } satisfies SSTConfig;

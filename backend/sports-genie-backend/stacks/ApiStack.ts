@@ -1,5 +1,4 @@
-import { StackContext, Api, EventBus } from "sst/constructs";
-import { DataStack } from "./DataStack";
+import { StackContext, Api, EventBus, Function } from "sst/constructs";
 
 export function API({ stack, app }: StackContext) {
   const bus = new EventBus(stack, "bus", {
@@ -8,13 +7,9 @@ export function API({ stack, app }: StackContext) {
     },
   });
 
-  const { fetchGamesLambda } = DataStack({stack, app});
-
   const api = new Api(stack, "api", {
     defaults: {},
-    routes: {
-      "GET /games": fetchGamesLambda
-    },
+    routes: {},
   });
 
   bus.subscribe("todo.created", {
@@ -24,4 +19,8 @@ export function API({ stack, app }: StackContext) {
   stack.addOutputs({
     ApiEndpoint: api.url,
   });
+
+  return {
+    api
+  };
 }
